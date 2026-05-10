@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManiQ - Pago Seguro</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary-color: #cf1d16; /* Rojo ManiQ */
+            --sand-bg: #f4e4bc;      /* Amarillo Arena */
+            --sand-dark: #e2d1a4;    /* Arena más oscuro para el degradado */
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--sand-bg) 0%, var(--sand-dark) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Cambiado para soportar footer */
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-content {
+            flex: 1; /* Ocupa el espacio disponible */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0; /* Espacio arriba y abajo de la tarjeta */
+        }
+
+        .card-payment {
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            background: rgba(255, 255, 255, 0.98);
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .card-header-status {
+            background: rgba(0, 0, 0, 0.02);
+            padding: 18px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .custom-input {
+            border-radius: 15px;
+            border: 2px solid #edeff2;
+            padding: 16px 20px;
+            height: auto;
+            font-size: 0.95rem;
+            background-color: #fcfcfc;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(207, 29, 22, 0.06);
+            outline: none;
+        }
+
+        /* Efecto de error */
+        .is-invalid {
+            border-color: #dc3545 !important;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .card-type-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            pointer-events: none;
+        }
+
+        /* Botón Estético sin bordes negros */
+        .btn-pay {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(207, 29, 22, 0.25);
+        }
+
+        .btn-pay:hover {
+            background: #b11812;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(207, 29, 22, 0.35);
+            color: white;
+        }
+
+        .btn-pay:active {
+            transform: translateY(-2px);
+        }
+
+        .label-style {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #9a8c6d; /* Tono café arena para etiquetas */
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        /* Corrección de imágenes de abajo */
+        .security-badges-container {
+            margin-top: 50px; /* Gran espacio antes de los logos */
+            text-align: center;
+        }
+
+        .security-badges img {
+            height: 25px; /* Tamaño perfecto para que se vean */
+            margin: 0 15px;
+            opacity: 0.5;
+            filter: grayscale(1); /* Efecto elegante en gris */
+            transition: all 0.3s;
+        }
+
+        .security-badges img:hover {
+            opacity: 1;
+            filter: grayscale(0);
+        }
+
+        h1.brand-title {
+            color: #5d533d; /* Café oscuro para el título sobre arena */
+            font-size: 2.8rem;
+            letter-spacing: -2px;
+        }
+
+        /* Espacio al final (Footer) */
+        .page-footer {
+            padding: 60px 0; /* MUCHO espacio al final */
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            margin-top: auto; /* Empuja el footer al final */
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5 col-xl-4">
+                
+                <div class="text-center mb-5">
+                    <h1 class="font-weight-bold brand-title mb-1">MANIQ</h1>
+                    <p class="small font-weight-bold text-uppercase" style="color: #8e8266; letter-spacing: 3px;">Tienda Oficial</p>
+                </div>
+
+                <div class="card card-payment">
+                    <div class="card-header-status">
+                        <small class="text-muted font-weight-bold">
+                            <i class="fas fa-lock-alt mr-1 text-success"></i> Transacción 100% segura
+                        </small>
+                    </div>
+                    
+                    <div class="card-body p-4 p-md-5">
+                        <form id="paymentForm" novalidate>
+                            
+                            <div class="form-group mb-4">
+                                <label class="label-style">Número de Tarjeta</label>
+                                <div class="position-relative">
+                                    <input type="text" id="cardNumber" class="form-control custom-input" 
+                                        placeholder="0000 0000 0000 0000" maxlength="19">
+                                    <img src="https://img.icons8.com/color/48/000000/card-exchange.png" id="cardLogo" class="card-type-icon">
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="label-style">Titular de la cuenta</label>
+                                <input type="text" id="cardName" class="form-control custom-input" placeholder="Nombre completo">
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="col-6">
+                                    <label class="label-style">Expiración</label>
+                                    <input type="text" id="cardExpiry" class="form-control custom-input" placeholder="MM / YY" maxlength="7">
+                                </div>
+                                <div class="col-6">
+                                    <label class="label-style">CVC / CVV</label>
+                                    <input type="password" id="cardCvv" class="form-control custom-input" placeholder="***" maxlength="3">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-pay btn-block" id="btnSubmit">
+                                Confirmar Pago
+                            </button>
+                        </form>
+
+                        <div class="security-badges-container">
+                            <div class="security-badges">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="page-footer">
+    <div class="container">
+        <a href="index.html" class="small font-weight-bold text-decoration-none" style="color: #8e8266; font-size: 0.9rem;">
+            <i class="fas fa-chevron-left mr-2"></i> Volver a la tienda
+        </a>
+    </div>
+</footer>
+
+<script>
+    const form = document.getElementById('paymentForm');
+    const cardNumber = document.getElementById('cardNumber');
+    const cardLogo = document.getElementById('cardLogo');
+
+    // Detector de Tarjeta
+    cardNumber.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.startsWith('4')) cardLogo.src = "https://img.icons8.com/color/48/000000/visa.png";
+        else if (val.startsWith('5')) cardLogo.src = "https://img.icons8.com/color/48/000000/mastercard.png";
+        else cardLogo.src = "https://img.icons8.com/color/48/000000/card-exchange.png";
+
+        let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+        e.target.value = formatted;
+        cardNumber.classList.remove('is-invalid');
+    });
+
+    // Formateo de Expiración
+    document.getElementById('cardExpiry').addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.length >= 2) e.target.value = val.substring(0, 2) + ' / ' + val.substring(2, 4);
+        else e.target.value = val;
+    });
+
+    // Envío y Animaciones
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const inputs = form.querySelectorAll('.custom-input');
+        let valid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim() || input.value.length < 3) {
+                input.classList.add('is-invalid');
+                valid = false;
+            }
+        });
+
+        if (!valid) return;
+
+        Swal.fire({
+            title: 'Procesando pago',
+            html: 'Estamos conectando con su banco...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading() }
+        });
+
+        setTimeout(() => {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Pago Exitoso!',
+                text: 'Gracias por confiar en ManiQ',
+                confirmButtonColor: '#cf1d16',
+                timer: 3000
+            }).then(() => {
+                window.location.href = 'index.html';
+            });
+        }, 2000);
+    });
+</script>
+
+</body>
+</html>
